@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Клинок, рассекающий демонов</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <aside class="sidebar" id="sidebar" aria-label="Навигация по уставу">
+      <div class="sidebar__brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <div>
+          <p>Фракция</p>
+          <strong>Клинок, рассекающий демонов</strong>
+        </div>
+      </div>
+      <nav class="sidebar__nav" id="navigation"></nav>
+    </aside>
+
+    <div class="shell">
+      <header class="topbar">
+        <button class="icon-button" id="menuButton" type="button" aria-label="Открыть меню">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <a class="brand-link" href="#home" aria-label="На главную">
+          <img
+            src="https://i.postimg.cc/85T2cpqG/foni-papik-pro-ltpp-p-kartinki-klinok-rassekayushchii-demonov-em-3.png"
+            alt="Логотип Корпуса Истребителей"
+          />
+          <span>Корпус Истребителей</span>
+        </a>
+        <a class="topbar__link" href="#home">Главная</a>
+        <a class="topbar__link" href="#charter">Устав</a>
+        <a class="topbar__link" href="#officers">Должностные лица</a>
+        <a class="topbar__link" href="#court">Суд Столпов</a>
+        <a class="topbar__link" href="#squads">Отряды</a>
+        <a class="topbar__link" href="#selection">Финальный отбор</a>
+      </header>
+
+      <main>
+        <section class="hero" id="home">
+          <div class="hero__image" aria-hidden="true"></div>
+          <div class="hero__content">
+            <img
+              class="hero__logo"
+              src="https://i.postimg.cc/85T2cpqG/foni-papik-pro-ltpp-p-kartinki-klinok-rassekayushchii-demonov-em-3.png"
+              alt="Логотип Корпуса Истребителей"
+            />
+            <p class="eyebrow">Демоноборческий корпус</p>
+            <h1>Устав Корпуса</h1>
+            <p class="hero__quote">
+              «Клинок держат не ради славы, а ради тех, кто не может защитить себя».
+            </p>
+          </div>
+          <a class="scroll-cue" href="#charter" aria-label="Перейти к уставу"></a>
+        </section>
+
+        <section class="page" id="content" aria-live="polite"></section>
+      </main>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    <script src="script.js"></script>
+  </body>
+</html>
