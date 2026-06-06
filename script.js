@@ -977,7 +977,6 @@ const navItems = [
   { id: 'promotion', label: 'Повышения', hash: 'promotion' },
   { id: 'recommendations', label: 'Рекомендации', hash: 'recommendations' },
   { id: 'court', label: 'Суд Столпов', hash: 'court' },
-  { id: 'squads', label: 'Отряды', hash: 'squads' },
   { id: 'selection', label: 'Финальный отбор', hash: 'selection' },
 ];
 
