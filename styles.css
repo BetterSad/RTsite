@@ -321,7 +321,13 @@ h2,
 h3,
 p,
 li {
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+}
+
+h2 {
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none;
 }
 
 h1 {
@@ -374,9 +380,12 @@ h1 {
 
 .page__header h2 {
   margin: 0;
-  font-size: clamp(40px, 6vw, 78px);
+  font-size: clamp(32px, 4.5vw, 64px);
   font-weight: 300;
-  line-height: 0.98;
+  line-height: 1.08;
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none;
 }
 
 .page__header p {
