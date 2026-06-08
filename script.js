@@ -947,7 +947,7 @@ const pages = {
         content: `
           <p>Запрещены действия интимного характера.</p>
           <div class="rule__note"><strong>Примечание:</strong> Если истребители находятся в браке, им разрешено целоваться (не злоупотреблять).</div>
-          <div class="rule__punishment"><strong>Наказание:</strong> Выговор.</div>
+          <div class="rule__punishment"><strong>Наказание:</strong> Предупреждение. В случае повторного нарушения — выговор.</div>
         `
       },
       {
