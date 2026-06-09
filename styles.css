@@ -504,9 +504,15 @@ h1 {
 
 .rule h3 {
   margin: 0 0 14px;
-  color: white;
+  color: rgb(255, 255, 255);
   font-size: 21px;
-  line-height: 1.32;
+  line-height: 1.6;
+  margin-bottom: 1px; /* отступ снизу */
+}
+
+p {
+  margin-top: 20px; /* отступ сверху */
+  margin-bottom: 30px; /* отступ снизу */
 }
 
 .rule p,
@@ -517,6 +523,9 @@ h1 {
 }
 
 .rule p {
+   color: rgba(255, 255, 255, 0.78);
+  font-size: 16px;
+  line-height: 1.58;
   margin: 0;
 }
 
@@ -674,9 +683,9 @@ h1 {
   position: fixed;
   inset: 0 auto 0 0;
   z-index: 30;
-  width: 280px;
+  width: 320px;
   background: rgba(9, 12, 11, 0.97);
-  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  border-right: 1px solid rgba(255, 0, 0, 0.07);
   backdrop-filter: blur(20px);
   overflow-y: auto;
   overscroll-behavior: contain;
