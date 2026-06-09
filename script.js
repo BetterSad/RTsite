@@ -963,22 +963,166 @@ const pages = {
   }
 };
 
-// ========== НАВИГАЦИЯ ==========
-const navItems = [
-  { id: 'charter', label: 'Устав', hash: 'charter' },
-  { id: 'general', label: 'Общие правила', hash: 'general' },
-  { id: 'hierarchy', label: 'Иерархия', hash: 'hierarchy' },
-  { id: 'hq', label: 'Правила в штабе', hash: 'hq' },
-  { id: 'officers', label: 'Должностные лица', hash: 'officers' },
-  { id: 'transfers', label: 'Переводы', hash: 'transfers' },
-  { id: 'leave', label: 'Уход из организации', hash: 'leave' },
-  { id: 'promotion', label: 'Повышения', hash: 'promotion' },
-  { id: 'recommendations', label: 'Рекомендации', hash: 'recommendations' },
-  { id: 'court', label: 'Суд Столпов', hash: 'court' },
-  { id: 'selection', label: 'Финальный отбор', hash: 'selection' },
+
+// ========== РЕЖИМЫ НАВИГАЦИИ ==========
+// Публичный режим: 
+const publicNavItems = [
+  { id: 'charter',   label: 'Устав',           hash: 'charter',   icon: '📜' },
+  { id: 'general',   label: 'Общие правила',   hash: 'general',   icon: '⚖️' },
+  { id: 'hierarchy', label: 'Иерархия',         hash: 'hierarchy', icon: '🏯' },
+  { id: 'selection', label: 'Финальный отбор',  hash: 'selection', icon: '⚔️' },
+  { id: 'recommendations', label: 'Рекомендации', hash: 'recommendations', icon: '🏅' },
+  { id: 'leave',           label: 'Уход из организации',  hash: 'leave',           icon: '🚪' },
+  { id: 'transfers',       label: 'Переводы',             hash: 'transfers',       icon: '🔄' },
 ];
 
-// ========== РЕНДЕР ==========
+// Служебный режим: 
+const officerNavGroups = [
+  {
+    label: 'Основной устав',
+    items: [
+      { id: 'charter',   label: 'Устав',           hash: 'charter',   icon: '📜' },
+      { id: 'general',   label: 'Общие правила',   hash: 'general',   icon: '⚖️' },
+      { id: 'hierarchy', label: 'Иерархия',         hash: 'hierarchy', icon: '🏯' },
+      { id: 'hq',        label: 'Правила в штабе',  hash: 'hq',        icon: '🏛️' },
+      { id: 'selection', label: 'Финальный отбор',  hash: 'selection', icon: '⚔️' },
+      { id: 'recommendations', label: 'Рекомендации', hash: 'recommendations', icon: '🏅' },
+      { id: 'leave',           label: 'Уход из организации',  hash: 'leave',           icon: '🚪' },
+      { id: 'transfers',       label: 'Переводы',             hash: 'transfers',       icon: '🔄' },
+    ]
+  },
+  {
+    label: 'Для должностных лиц',
+    officer: true,
+    items: [
+      { id: 'officers',        label: 'Устав',     hash: 'officers',        icon: '🎖️', badge: 'Должностное лицо' },
+      { id: 'court',           label: 'Суд Столпов',          hash: 'court',           icon: '⚖️', badge: 'Столп'  },
+      { id: 'promotion',       label: 'Повышения',            hash: 'promotion',       icon: '📈', badge: 'Столп' },
+    ]
+  }
+];
+
+// Страницы, при открытии которых активируется служебный режим
+const officerPages = new Set([
+  'officers', 'discipline', 'court', 'promotion'
+]);
+
+// ========== СОСТОЯНИЕ ==========
+let isOfficerMode = false;
+
+// ========== ПЕРЕКЛЮЧЕНИЕ РЕЖИМОВ ==========
+function enterOfficerMode() {
+  isOfficerMode = true;
+  document.body.classList.add('officer-mode');
+  rebuildTopbar();
+  rebuildSidebar();
+  const badge = document.getElementById('sidebarModeBadge');
+  if (badge) badge.textContent = 'Режим должностных лиц';
+}
+
+function exitOfficerMode() {
+  isOfficerMode = false;
+  document.body.classList.remove('officer-mode');
+  rebuildTopbar();
+  rebuildSidebar();
+}
+
+// ========== ТОПБАР ==========
+function rebuildTopbar() {
+  const topbar = document.querySelector('.topbar');
+  if (!topbar) return;
+
+  // Remove existing injected links and badge
+  topbar.querySelectorAll('.topbar__link, .topbar__officer-badge').forEach(el => el.remove());
+
+  if (isOfficerMode) {
+    // Officer mode: just a badge in topbar, navigation is in sidebar
+    const badge = document.createElement('span');
+    badge.className = 'topbar__officer-badge';
+    badge.textContent = 'Должностные лица';
+    topbar.appendChild(badge);
+  } else {
+    // Public mode: standard topbar links
+    publicNavItems.forEach(item => {
+      const a = document.createElement('a');
+      a.className = 'topbar__link';
+      a.href = '#' + item.hash;
+      a.setAttribute('data-page', item.id);
+      a.textContent = item.label;
+      a.addEventListener('click', e => { e.preventDefault(); navigate(item.id); });
+      topbar.appendChild(a);
+    });
+  }
+}
+
+// ========== САЙДБАР ==========
+function rebuildSidebar() {
+  const nav = document.getElementById('navigation');
+  if (!nav) return;
+  nav.innerHTML = '';
+
+  if (!isOfficerMode) return;
+
+  officerNavGroups.forEach(group => {
+    const groupLabel = document.createElement('div');
+    groupLabel.className = 'sidebar__nav-group';
+    groupLabel.textContent = group.label;
+    nav.appendChild(groupLabel);
+
+    group.items.forEach(item => {
+      const a = document.createElement('a');
+      a.href = '#' + item.hash;
+      a.setAttribute('data-page', item.id);
+
+      const iconSpan = document.createElement('span');
+      iconSpan.style.cssText = 'font-size:15px;line-height:1;flex-shrink:0';
+      iconSpan.textContent = item.icon;
+      a.appendChild(iconSpan);
+
+      const labelSpan = document.createElement('span');
+      labelSpan.style.cssText = 'flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap';
+      labelSpan.textContent = item.label;
+      a.appendChild(labelSpan);
+
+      if (item.badge) {
+        const badgeEl = document.createElement('span');
+        badgeEl.className = 'nav-badge';
+        badgeEl.textContent = item.badge;
+        a.appendChild(badgeEl);
+      }
+
+      a.addEventListener('click', e => { e.preventDefault(); navigate(item.id); closeMenu(); });
+      nav.appendChild(a);
+    });
+  });
+
+  // Обновляем активную ссылку
+  updateSidebarActive(location.hash.replace('#', '') || 'home');
+}
+
+function updateSidebarActive(pageId) {
+  document.querySelectorAll('.sidebar__nav a').forEach(a => {
+    const isActive = a.getAttribute('data-page') === pageId;
+    const isOfficer = officerPages.has(pageId);
+    a.classList.toggle('active', isActive && !isOfficer);
+    a.classList.toggle('active--officer', isActive && isOfficer);
+  });
+}
+
+// ========== МЕНЮ (мобильный сайдбар) ==========
+function closeMenu() {
+  document.body.classList.remove('menu-open');
+  const overlay = document.getElementById('overlay');
+  if (overlay) overlay.style.display = 'none';
+}
+
+function openMenu() {
+  document.body.classList.add('menu-open');
+  const overlay = document.getElementById('overlay');
+  if (overlay) overlay.style.display = 'block';
+}
+
+// ========== РЕНДЕР СТРАНИЦ ==========
 function renderPage(pageId) {
   const data = pages[pageId];
   const container = document.getElementById('content');
@@ -1103,7 +1247,8 @@ function renderPage(pageId) {
   });
 }
 
-function setActiveNav(pageId) {
+// ========== НАВИГАЦИЯ ==========
+function setActiveTopbar(pageId) {
   document.querySelectorAll('.topbar__link').forEach(a => {
     a.classList.toggle('topbar__link--active', a.getAttribute('data-page') === pageId);
   });
@@ -1111,39 +1256,65 @@ function setActiveNav(pageId) {
 
 function navigate(pageId, pushState = true) {
   if (pushState) history.pushState({ page: pageId }, '', '#' + pageId);
+
+  // Determine if we need officer mode
+  const needsOfficer = officerPages.has(pageId);
+  if (needsOfficer && !isOfficerMode) {
+    enterOfficerMode();
+  } else if (!needsOfficer && isOfficerMode && pageId === 'home') {
+    // Only exit officer mode when going back to home
+    exitOfficerMode();
+  }
+
   renderPage(pageId);
-  setActiveNav(pageId);
+  setActiveTopbar(pageId);
+  updateSidebarActive(pageId);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ========== ИНИЦИАЛИЗАЦИЯ ==========
 document.addEventListener('DOMContentLoaded', () => {
-  // Inject topbar links
-  const topbar = document.querySelector('.topbar');
-  if (topbar) {
-    topbar.querySelectorAll('.topbar__link').forEach(a => a.remove());
 
-    navItems.forEach(item => {
-      const a = document.createElement('a');
-      a.className = 'topbar__link';
-      a.href = '#' + item.hash;
-      a.setAttribute('data-page', item.id);
-      a.textContent = item.label;
-      a.addEventListener('click', e => {
-        e.preventDefault();
-        navigate(item.id);
-      });
-      topbar.appendChild(a);
+  // Initial topbar (public mode)
+  rebuildTopbar();
+
+  // Sidebar exit link
+  const exitLink = document.getElementById('sidebarExitLink');
+  if (exitLink) {
+    exitLink.addEventListener('click', e => {
+      e.preventDefault();
+      exitOfficerMode();
+      navigate('home');
+      closeMenu();
     });
   }
 
-  // Brand logo also goes home
+  // Brand logo goes home
   const homeLink = document.querySelector('.brand-link');
   if (homeLink) {
     homeLink.addEventListener('click', e => {
       e.preventDefault();
+      exitOfficerMode();
       navigate('home');
     });
+  }
+
+  // Mobile menu button
+  const menuButton = document.getElementById('menuButton');
+  const overlay = document.getElementById('overlay');
+
+  if (menuButton) {
+    menuButton.addEventListener('click', () => {
+      if (document.body.classList.contains('menu-open')) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
+  }
+
+  if (overlay) {
+    overlay.addEventListener('click', closeMenu);
   }
 
   // Initial page from hash
@@ -1160,6 +1331,7 @@ window.addEventListener('popstate', () => {
   if (hash && hash !== 'home' && pages[hash]) {
     navigate(hash, false);
   } else {
+    exitOfficerMode();
     navigate('home', false);
   }
 });

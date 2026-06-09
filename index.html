@@ -9,16 +9,23 @@
   <body>
     <aside class="sidebar" id="sidebar" aria-label="Навигация по уставу">
       <div class="sidebar__brand">
-        <span class="brand-mark" aria-hidden="true"></span>
+        <img class="brand-mark" src="https://i.postimg.cc/KzgjYjbL/Demon-Slayer-Kimetsu-No-Yaiba-Logo-PNG-Top-PNG-removebg-preview.png" alt="" aria-hidden="true" />
         <div>
           <p>Фракция</p>
-          <strong>Клинок, рассекающий демонов</strong>
+          <strong>Демоноборческий корпус</strong>
         </div>
       </div>
+      <div class="sidebar__mode-badge" id="sidebarModeBadge"></div>
       <nav class="sidebar__nav" id="navigation"></nav>
+      <div class="sidebar__footer">
+        <a class="sidebar__exit-link" id="sidebarExitLink" href="#home">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+          Вернуться в общий устав
+        </a>
+      </div>
     </aside>
 
-    <div class="shell">
+    <div class="shell" id="shell">
       <header class="topbar">
         <button class="icon-button" id="menuButton" type="button" aria-label="Открыть меню">
           <span></span>
@@ -32,12 +39,7 @@
           />
           <span>Корпус Истребителей</span>
         </a>
-        <a class="topbar__link" href="#home">Главная</a>
-        <a class="topbar__link" href="#charter">Устав</a>
-        <a class="topbar__link" href="#officers">Должностные лица</a>
-        <a class="topbar__link" href="#court">Суд Столпов</a>
-        <a class="topbar__link" href="#squads">Отряды</a>
-        <a class="topbar__link" href="#selection">Финальный отбор</a>
+        <!-- topbar links injected by JS -->
       </header>
 
       <main>
